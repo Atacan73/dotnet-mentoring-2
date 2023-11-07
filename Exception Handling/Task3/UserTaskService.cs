@@ -12,25 +12,23 @@ namespace Task3
             _userDao = userDao;
         }
 
-        public int AddTaskForUser(int userId, UserTask task)
+        public void AddTaskForUser(int userId, UserTask task)
         {
             if (userId < 0)
-                return -1;
+                throw new Exception("Invalid userId");
 
             var user = _userDao.GetUser(userId);
             if (user == null)
-                return -2;
+                throw new NullReferenceException("User not Found");
 
             var tasks = user.Tasks;
             foreach (var t in tasks)
             {
                 if (string.Equals(task.Description, t.Description, StringComparison.OrdinalIgnoreCase))
-                    return -3;
+                    throw new Exception("The task already exists");
             }
 
             tasks.Add(task);
-
-            return 0;
         }
     }
 }
